@@ -1,0 +1,24 @@
+{
+  "name": "psrtiinventorysystem",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://bitbucket.org/psrtimis/inventorysystem.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "homepage": "https://bitbucket.org/psrtimis/inventorysystem#readme",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "express-session": "^1.13.0",
+    "jsonwebtoken": "^7.0.1",
+    "morgan": "^1.6.1",
+    "mysql": "^2.10.2"
+  }
+}

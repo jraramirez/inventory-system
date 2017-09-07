@@ -1,0 +1,1 @@
+INSERT INTO `psrti_inventory`.`accounts` (`username`, `password`, `isAdmin`) VALUES ('admin', 'admin', '1');

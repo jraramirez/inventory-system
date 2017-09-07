@@ -1,0 +1,174 @@
+<div class="dr-add" ng-controller="AddDRCtrl as dr">
+	<h3>Add a New Delivery Receipt</h3>
+	<form class="form-horizontal" name="CheckDRForm" ng-submit="dr.validateCheckDRForm(CheckDRForm) && dr.checkDR()" ng-hide="dr.validDR" novalidate>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">
+				Fund Cluster
+			</label>
+			<div class="btn-group col-sm-10">
+				<label class="btn btn-default" ng-model="dr.newDR.fund_cluster_name" uib-btn-radio="'RAF 101'" checked>RAF 101</label>
+				<label class="btn btn-default" ng-model="dr.newDR.fund_cluster_name" uib-btn-radio="'SPECIAL ACCT 103'" >SPECIAL ACCT 103</label>
+				<label class="btn btn-default" ng-model="dr.newDR.fund_cluster_name" uib-btn-radio="'IGF 105'" >IGF 105</label>
+				<label class="btn btn-default" ng-model="dr.newDR.fund_cluster_name" uib-btn-radio="'IATF 107'" >IATF 107</label>
+			</div>
+		</fieldset>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">
+				Delivery Receipt Number
+			</label>
+			<div class="col-sm-10">
+				<input required ng-model="dr.newDR.id" type="text" class="form-control" placeholder="Delivery Receipt Number" title="Delivery Receipt Number" name="id"/>
+			</div>
+		</fieldset>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">
+				Date Added
+			</label>
+			<div class="col-sm-10">
+				<p class="input-group" ng-controller="UIBDatePickerCtrl as datepicker">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="datepicker.open()">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+					</span>
+					<input required ng-model="dr.newDR.date_added" type="text" class="form-control" placeholder="YYYY-MM-DD" title="Date Added" ng-click="datepicker.open()"
+					uib-datepicker-popup="yyyy-MM-dd" is-open="datepicker.isOpen" name="date_added" readonly/>
+				</p>
+			</div>
+		</fieldset>
+		<fieldset>
+			<div ng-show="dr.error" class="alert alert-danger" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				{{dr.errorMessage}}
+			</div>
+			<input type="submit" class="btn btn-primary pull-right" value="Check Availability"/>
+		</fieldset>
+	</form>
+	<div ng-show="dr.validDR">
+		<div ng-show="!dr.addingNewItem">
+			<h3>Add Items Under the New Delivery Receipt Number {{dr.newDR.id}} of Fund Cluster {{dr.newDR.fund_cluster_name}}</h3>
+			<table st-table="dr.newDRItemsToDisplay" st-safe-src="dr.newDRItems" class="table">
+				<thead>
+					<tr class="table-header">
+						<th st-sort="description">Description</th>
+						<th st-sort="item_code">Item Code</th>
+						<th st-sort="unit">Unit</th>
+						<th st-sort="price">Price</th>
+						<th st-sort="quantity_added">Quantity</th>
+						<th st-sort="amount">Amount</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in dr.newDRItemsToDisplay">
+						<td>{{item.description}}</td>
+						<td>{{item.item_code}}</td>
+						<td>{{item.unit}}</td>
+						<td align="right">{{item.price | currency:"Php "}}</td>
+						<td align="right">{{item.quantity_added}}</td>
+						<td align="right">{{item.amount | currency:"Php "}}</td>
+						<td>
+							<button class="btn btn-danger btn-circle" ng-click="dr.removeEntry(item.id)">
+								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+							</button>
+						</td>
+					</tr>
+					<tr ng-if="dr.newDRItems.length === 0">
+						<td colspan="7">
+							<div class="jumbotron">
+								<h3 class="text-center">No items added yet. Add one by clicking here:
+									<button class="btn btn-success btn-circle" ng-click="dr.toggleAddingNewItem()">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+									</button>
+								</h3>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="6">
+						</td>
+						<td>
+							<button ng-if="dr.newDRItems.length > 0" class="btn btn-success btn-circle" ng-click="dr.toggleAddingNewItem()">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td>Total</td>
+						<td colspan="3"></td>
+						<td align="right">{{dr.newDR.total_quantity}}</td>
+						<td align="right">{{dr.newDR.total_amount | currency:"Php "}}</td>
+						<td></td>
+					</tr>
+				</tfoot>
+			</table>
+			<div>
+				<fieldset>
+					<!--- TODO: proper error placement --->
+					<div ng-show="dr.DRError" class="alert alert-danger" role="alert">
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+						<span class="sr-only">Error:</span>
+						{{dr.DRErrorMessage}}
+					</div>
+				</fieldset>
+			</div>
+			<div class="btn-group pull-right">
+				<button class="btn btn-default" ng-click="dr.startOver()"> Start Over </button>
+				<button class="btn btn-primary pull-right" ng-click="dr.addDR()">Finish</button>
+			</div>
+
+		</div>
+		<form class="form-horizontal" ng-show="dr.addingNewItem" name="AddItemForm" ng-submit="dr.validateAddItemForm(AddItemForm) && dr.pushNewDRItem()" novalidate>
+			<h3>Add Item Entry</h3>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-4">
+					Is the item new? Add it to the ledger first
+				</label>
+				<div class="col-sm-6">
+					<a href="/#/item/add"><button class="btn btn-success">Create New Item</button></a>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Description
+				</label>
+				<div class="col-sm-10">
+					<input type="text" ng-model="dr.newTempItem" uib-typeahead="description as description.description for description in dr.items | filter:$viewValue | limitTo:25" typeahead-editable="false" class="form-control" placeholder="Description" value="null" name="description"/>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Quantity
+				</label>
+				<div class="col-sm-10">
+					<input required ng-model="dr.newItem.quantity_added" type="number" class="form-control" placeholder="Quantity" title="Quantity" name="quantity_added" min="0"/>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Unit Price
+				</label>
+				<div class="col-sm-10">
+					<input required ng-model="dr.newItem.price" type="number" class="form-control" placeholder="Price" title="Price" name="price" min="0"/>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<div class="col-sm-12">
+					<div class="btn-group pull-right">
+						<button class="btn btn-default" ng-click="dr.startOver()"> Start Over </button>
+						<input type="submit" class="btn btn-primary pull-right" value="Add"/>
+					</div>
+				</div>
+			</fieldset>
+			<!--- TODO: proper error placement --->
+			<div ng-show="dr.ItemError" class="alert alert-danger" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				{{dr.ItemErrorMessage}}
+			</div>
+		</form>
+	</div>
+</div>

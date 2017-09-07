@@ -1,0 +1,71 @@
+<div class="supply-table" ng-controller="ItemCtrl as item">
+	<div>
+		<h3>List of All Items</h3>
+	</div>
+	<table st-table="item.itemsToDisplay" st-safe-src="item.items" class="table table-striped">
+		<thead>
+			<tr class="table-control">
+				<th class="col-sm-3" colspan="2">
+					<p class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-search"></i>
+						</span>
+						<input placeholder="Global search" st-search class="form-control" type="text"/>
+					</p>
+				</th>
+				<th class="col-sm-3">
+					<div st-pagination="" st-items-by-page="item.itemsPerPage" st-displayed-pages="3"></div>
+				</th>
+				<th class="col-sm-1">
+					<p class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-th-list"></i>
+						</span>
+						<input placeholder="10" ng-model="item.itemsPerPage" class="form-control" type="number" min="1"/>
+					</p>
+				</th>
+			</tr>
+			<tr class="table-header">
+				<th st-sort="item_code">Item Code</th>
+				<th st-sort="description">Description</th>
+				<th st-sort="unit">Unit</th>
+				<th st-sort="category">Category</th>
+				<th st-sort="category">Actions</th>
+			</tr>
+			<tfoot>
+			</tfoot>
+		</thead>
+		<tbody>
+			<tr ng-repeat="piece in item.itemsToDisplay">
+
+				<td>
+					<span ng-if="!piece.isEditing">{{piece.item_code}}</span>
+					<input ng-if="piece.isEditing" class="form-control" ng-model="piece.item_code"></input>
+				</td>
+				<td>
+					<span ng-if="!piece.isEditing">{{piece.description}}</span>
+					<input ng-if="piece.isEditing" class="form-control" ng-model="piece.description"></input>
+				</td>
+				<td>
+					<span ng-if="!piece.isEditing">{{piece.unit}}</span>
+					<input ng-if="piece.isEditing" class="form-control" ng-model="piece.unit"></input>
+				</td>
+				<td class="col-sm-2">
+					<span ng-if="!piece.isEditing">{{piece.category}}</span>
+					<input ng-if="piece.isEditing" class="form-control" ng-model="piece.category"></input>
+				</td>
+				<td class="col-sm-2">
+					<label ng-if="!piece.isEditing" class="btn btn-primary btn-circle" ng-click="item.editItem(piece.id)">
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+					</label>
+					<label ng-if="!piece.isEditing" class="btn btn-danger btn-circle" ng-click="item.deleteItem(piece.id)">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</label>
+					<label ng-if="piece.isEditing" class="btn btn-success btn-circle" ng-click="item.saveChanges(piece.id)">
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+					</label>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,53 @@
+<div class="supply-table" ng-controller="ReportByItemCtrl as report">
+	<div>
+		<h2>History of Delivery Reports Under Item {{report.item_name}} of APR {{report.apr_id_number}}</h2>
+	</div>
+	<div class="jumbotron text-center" ng-show="report.reportsToDisplay.length == 0">
+		<h4>No results to display.</h4>
+	</div>
+	<table st-table="report.reportsToDisplay" st-safe-src="report.reports" class="table" ng-show="report.reportsToDisplay.length > 0">
+		<thead>
+			<tr class="table-control">
+				<th>
+					<p class="input-group">
+						<span class="input-group-addon">
+								<i class="glyphicon glyphicon-search"></i>
+						</span>
+						<input placeholder="Global search" st-search class="form-control" type="text"/>
+					</p>
+				</th>
+				<th colspan="2">
+					<div st-pagination="" st-items-by-page="report.itemsPerPage" st-displayed-pages="3"></div>
+				</th>
+				<th style="width: 10%">
+					<p class="input-group">
+						<span class="input-group-addon">
+								<i class="glyphicon glyphicon-th-list"></i>
+						</span>
+						<input placeholder="10" ng-model="report.itemsPerPage" class="form-control" type="number" min="1"/>
+					</p>
+				</th>
+			</tr>
+			<tr class="table-header">
+				<th st-sort="delivery_report_id_number">Delivery Report Number</th>
+				<th st-sort="quantity">Quantity</th>
+				<th st-sort="unit_price">Unit price</th>
+				<th st-sort="amount">Amount</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="piece in report.reportsToDisplay">
+				<td>{{piece.delivery_report_id_number}}</td>
+				<td>{{piece.quantity}}</td>
+				<td>{{piece.unit_price}}</td>
+				<td>{{piece.amount}}</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="10" class="text-center">
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>

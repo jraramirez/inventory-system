@@ -1,0 +1,46 @@
+<div class="supply-table" ng-controller="FCCtrl as fc">
+	<div>
+		<h3>List of All Fund Clusters</h3>
+	</div>
+	<table st-table="fc.itemsToDisplay" st-safe-src="fc.fcs" class="table table-striped">
+		<thead>
+			<tr class="table-control">
+				<th class="col-sm-3" colspan="2">
+					<p class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-search"></i>
+						</span>
+						<input placeholder="Global search" st-search class="form-control" type="text"/>
+					</p>
+				</th>
+				<th class="col-sm-3" colspan="1">
+					<div st-pagination="" st-items-by-page="fc.itemsPerPage" st-displayed-pages="3"></div>
+				</th>
+				<th class="col-sm-1">
+					<p class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-th-list"></i>
+						</span>
+						<input placeholder="10" ng-model="fc.itemsPerPage" class="form-control" type="number" min="1"/>
+					</p>
+				</th>
+			</tr>
+			<tr class="table-header">
+				<th st-sort="name">Fund Cluster</th>
+				<th st-sort="total_quantity">Total Quantity</th>
+				<th st-sort="total_price">Total Amount</th>
+				<th style="width: 10%">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in fc.itemsToDisplay">
+				<td>{{item.name}}</td>
+				<td align="right">{{item.total_quantity}}</td>
+				<td align="right">{{item.total_amount | currency:"Php "}}</td>
+				<td><a class="btn btn-primary btn-circle" href="/#/fc/view/{{item.name}}/items">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+				</a></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

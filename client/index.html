@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<link rel="icon" href="../../favicon.ico">
+
+		<title>PSRTI Inventory System</title>
+
+		<!-- Bootstrap core CSS -->
+		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+		<link href="css/starter-template.css" rel="stylesheet">
+	</head>
+
+	<body ng-app="equipmentInventory" ng-controller="AccountCtrl as acct">
+
+		<nav class="navbar navbar-inverse navbar-fixed-top" ng-show="acct.checkLoggedIn()">
+			<div class="container" >
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="/#/">PSRTI Inventory System</a>
+				</div>
+				<div id="navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-left">
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Items Ledger<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="/#/item/view">View Items</a></li>
+								<li><a href="/#/item/add">Create New Item</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Fund Clusters<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="/#/fc/view">View Fund Clusters</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Delivery Receipts<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="/#/dr/view">View Delivery Receipts</a></li>
+								<li><a href="/#/dr/add">Add Delivery Receipt</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RIS<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="/#/ris/view">View Requisition Issue Slips</a></li>
+								<li><a href="/#/ris/add">Add Requisition Issue Slip</a></li>
+								<li><a href="/#/ris/view/stock-card">View Stock Cards</a></li>
+								<li><a href="/#/ris/monthly-report">Generate Report of Supplies and Materials Issued</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ICS<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="/#/ics/view">View Inventory Custodian Slips</a></li>
+								<li><a href="/#/ics/add">Add an Inventory Custodian Slip</a></li>
+								<li><a href="/#/ics/ics-report">Generate Report on the Physical Count of Inventories</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PAR<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="/#/par/view">View Property Acknowledgement Receipts</a></li>
+								<li><a href="/#/par/add">Add a Property Acknowledgement Receipt</a></li>
+								<li><a href="/#/par/view/property-card">View Property Cards</a></li>
+								<li><a href="/#/par/par-report">Generate Report on the Physical Count of Property, Plant and Equipment</a></li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right" ng-show="acct.checkLoggedIn()">
+						<li><a href="" ng-click="acct.logout()">Logout</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container starter-template"ng-view>
+
+		</div>
+	</body>
+
+	<script type="text/javascript" src="bower_components/angular/angular.js"> </script>
+	<script type="text/javascript" src="bower_components/angular-route/angular-route.js"> </script>
+	<script type="text/javascript" src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+	<script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+	<script type="text/javascript" src="bower_components/angular-file-saver/dist/angular-file-saver.bundle.js"></script>
+	<script type="text/javascript" src="app.js"> </script>
+	<script type="text/javascript" src="service/table-to-excel-service.js"> </script>
+	<script type="text/javascript" src="service/item-service.js"> </script>
+	<script type="text/javascript" src="service/dr-service.js"> </script>
+	<script type="text/javascript" src="service/fc-service.js"> </script>
+	<script type="text/javascript" src="service/ris-service.js"> </script>
+	<script type="text/javascript" src="service/ics-service.js"> </script>
+	<script type="text/javascript" src="service/par-service.js"> </script>
+	<script type="text/javascript" src="service/account-service.js"> </script>
+	<script type="text/javascript" src="controller/ui/uib-datepicker-controller.js"> </script>
+	<script type="text/javascript" src="controller/ui/table-to-excel-controller.js"> </script>
+	<script type="text/javascript" src="controller/item-controller.js"> </script>
+	<script type="text/javascript" src="controller/dr-controller.js"> </script>
+	<script type="text/javascript" src="controller/fc-controller.js"> </script>
+	<script type="text/javascript" src="controller/ris-controller.js"> </script>
+	<script type="text/javascript" src="controller/ics-controller.js"> </script>
+	<script type="text/javascript" src="controller/par-controller.js"> </script>
+	<script type="text/javascript" src="controller/account-controller.js"> </script>
+
+</html>

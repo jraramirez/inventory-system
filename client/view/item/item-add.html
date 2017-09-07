@@ -1,0 +1,44 @@
+<h2>Create a New Item</h2>
+<div ng-controller="AddItemCtrl as item">
+	<form class="form-horizontal" name="AddItemForm" ng-submit="item.validateAddItemForm(AddItemForm) && item.addItem()" novalidate>
+		<fieldset class="form-group">
+			<label class="col-sm-2 control-label">Item Category</label>
+			<div class="btn-group col-sm-10">
+				<label ng-click="item.getCategoryCount('1')" class="btn btn-default" ng-model="item.newItem.category" uib-btn-radio="'Common-Use Supplies'"  checked>Common-Use Supplies</label>
+				<label ng-click="item.getCategoryCount('2')" class="btn btn-default" ng-model="item.newItem.category" uib-btn-radio="'Consumables'" >Consumables</label>
+				<label ng-click="item.getCategoryCount('3')" class="btn btn-default" ng-model="item.newItem.category" uib-btn-radio="'Electrical'" >Electrical</label>
+				<label ng-click="item.getCategoryCount('4')" class="btn btn-default" ng-model="item.newItem.category" uib-btn-radio="'Janitorial'" >Janitorial</label>
+				<label ng-click="item.getCategoryCount('5')" class="btn btn-default" ng-model="item.newItem.category" uib-btn-radio="'Office Device'" >Office Device</label>
+				<label ng-click="item.getCategoryCount('6')" class="btn btn-default" ng-model="item.newItem.category" uib-btn-radio="'Office Furnitures'" >Office Furnitures</label>
+				<label ng-click="item.getCategoryCount('7')" class="btn btn-default" ng-model="item.newItem.category" uib-btn-radio="'Office Equipment'" >Office Equipment</label>
+			</div>
+		</fieldset>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">Item Code</label>
+			<div class="col-sm-10">
+				<input readonly name="property_number" ng-model="item.newItem.item_code" type="text" class="form-control" placeholder="Item Code" title="Item Code" />
+			</div>
+		</fieldset>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">Name and Description</label>
+			<div class="col-sm-10">
+				<textarea required name="description" ng-model="item.newItem.description" class="form-control" placeholder="Write a short description of the item..." title="Description"></textarea>
+			</div>
+		</fieldset>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">Unit</label>
+			<div class="col-sm-10">
+				<input required name="unit" ng-model="item.newItem.unit" type="text" class="form-control" placeholder="Unit" title="Unit" />
+			</div>
+		</fieldset>
+		<fieldset>
+			<!--- TODO: proper error placement --->
+			<div ng-show="item.error" class="alert alert-danger" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				{{item.errorMessage}}
+			</div>
+			<input type="submit" class="btn btn-primary pull-right" value="Create Item"/>
+		</fieldset>
+	</form>
+</div>

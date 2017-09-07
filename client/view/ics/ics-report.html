@@ -1,0 +1,132 @@
+
+<div class="supply-table" ng-controller="ICSReportCtrl as report">
+	<div>
+		<h3>Report on the Physical Count of Inventories</h3>
+	</div>
+	<form class="form-horizontal" ng-show="!report.validMonth" name="CheckMonthForm" ng-submit="report.validateCheckMonthForm(CheckMonthForm) && report.getAllICSByFCMonth()" novalidate>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">
+				Fund Cluster
+			</label>
+			<div class="col-sm-10 btn-group">
+				<label class="btn btn-default" ng-model="report.fund_cluster_name" uib-btn-radio="'RAF 101'" checked>RAF 101</label>
+				<label class="btn btn-default" ng-model="report.fund_cluster_name" uib-btn-radio="'SPECIAL ACCT 103'" >SPECIAL ACCT 103</label>
+				<label class="btn btn-default" ng-model="report.fund_cluster_name" uib-btn-radio="'IGF 105'" >IGF 105</label>
+				<label class="btn btn-default" ng-model="report.fund_cluster_name" uib-btn-radio="'IATF 107'" >IATF 107</label>
+			</div>
+		</fieldset>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">
+				Month
+			</label>
+			<div class="col-sm-10 btn-group">
+				<label class="btn btn-default" ng-model="report.month" ng-click="report.setDate()" uib-btn-radio="'6'" checked>July</label>
+				<label class="btn btn-default" ng-model="report.month" ng-click="report.setDate()" uib-btn-radio="'11'">December</label>
+			</div>
+		</fieldset>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">
+				Year
+			</label>
+			<div class="col-sm-10">
+				<p class="input-group" ng-controller="UIBDatePickerCtrl as datepicker">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="datepicker.openInYears()">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+					</span>
+					<input required ng-model="report.endMonth" type="text" class="form-control" placeholder="yyyy-MMMM" title="Year"  ng-click="datepicker.openInYears()"
+					uib-datepicker-popup="yyyy" datepicker-options="datepicker.options" is-open="datepicker.isOpen" name="year" readonly/>
+				</p>
+			</div>
+		</fieldset>
+		<fieldset>
+			<!--- TODO: proper error placement --->
+			<div ng-show="report.error" class="alert alert-danger" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				{{report.errorMessage}}
+			</div>
+			<input type="submit" class="btn btn-primary pull-right" value="Check Availability"/>
+		</fieldset>
+	</form>
+	<div ng-show="report.validMonth">
+		<div class="jumbotron" ng-show="report.ICSs.length == 0">
+			<h3 class="text-center">
+				There are no items for {{report.endMonth | date:'MMMM'}} {{report.endMonth | date:'yyyy'}} under the Fund Cluster {{report.fund_cluster_name}}. Check out other months and/or Fund Cluster.
+				<button class="btn btn-primary" ng-click="report.startOver()"> Start Over </button>
+			</h3>
+		</div>
+		<div class="form-horizontal" ng-show="report.ICSs.length > 0">
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Fund Cluster
+				</label>
+				<div class="col-sm-10">
+					<input readonly type="text" ng-model="report.fund_cluster_name" class="form-control"/>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Month
+				</label>
+				<div class="col-sm-10">
+					<input readonly type="text" ng-model="report.endMonth" class="form-control" uib-datepicker-popup="MMMM"/>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Year
+				</label>
+				<div class="col-sm-10">
+					<input readonly type="text" ng-model="report.endMonth" class="form-control" uib-datepicker-popup="yyyy"/>
+				</div>
+			</fieldset>
+			<div id="report-table">
+				<table st-table="report.itemsToDisplay" st-safe-src="report.ICSs" class="table">
+					<tr ng-hide="1">
+						<td>Fund Cluster:</td>
+						<td>{{report.fund_cluster_name}}</td>
+					</tr>
+					<tr ng-hide="1">
+						<td>Date:</td>
+						<td>{{report.endMonth | date:'yyyy-MM'}}</td>
+					</tr>
+					<thead>
+						<tr class="table-header">
+							<th class="col-sm-2">Article</th>
+							<th class="col-sm-5">Description</th>
+							<th class="col-sm-1">Item Code</th>
+							<th class="col-sm-1">Unit</th>
+							<th class="col-sm-1">Balance Per Card</th>
+							<th class="col-sm-1">On Hand Per Count</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in report.itemsToDisplay">
+							<td colspan="6">
+								<table class="table">
+									<tbody>
+										<tr ng-repeat="piece in item.items">
+											<td class="col-sm-2">{{piece.category}}</td>
+											<td class="col-sm-5">{{piece.description}}</td>
+											<td class="col-sm-1">{{piece.item_code}}</td>
+											<td class="col-sm-1">{{piece.unit}}</td>
+											<td class="col-sm-1" align="right">{{piece.quantity_subtracted}}</td>
+											<td class="col-sm-1" align="right">{{piece.quantity_subtracted}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div ng-controller="TableToExcelCtrl as table">
+				<button class="btn btn-primary pull-right" ng-click="table.exportToExcel('report-table')">
+					<span class="glyphicon glyphicon-share"></span> Export to Excel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

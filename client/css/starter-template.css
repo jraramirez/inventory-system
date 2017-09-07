@@ -1,0 +1,52 @@
+body {
+	padding-top: 50px;
+}
+
+tr.table-control > th {
+	text-align: right;
+}
+
+tr.table-header > th {
+	cursor: pointer;
+}
+
+.panel-primary {
+	border-color: #222
+}
+
+.panel-primary > .panel-heading {
+	color: #FFF;
+	background-color: #222;
+	border-color: #222;
+}
+
+.starter-template {
+	padding: 40px 15px;
+}
+
+.ng-invalid.ng-dirty{
+	border-color: red
+}
+.ng-valid.ng-dirty{
+	border-color: green
+}
+
+.st-sort-ascent:before{
+	content: '\25B2';
+}
+.st-sort-descent:before{
+	content: '\25BC';
+}
+
+.pagination-table {
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+
+.btn-circle {
+	width: 40px;
+  height: 40px;
+  line-height: 40px;
+  padding:0;
+  border-radius: 50%;
+}

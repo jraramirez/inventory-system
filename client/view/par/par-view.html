@@ -1,0 +1,55 @@
+
+<div class="supply-table" ng-controller="PARCtrl as par">
+	<div>
+		<h3>List of All Property Acknowledgement Receipts</h3>
+	</div>
+	<table st-table="par.itemsToDisplay" st-safe-src="par.PARs" class="table table-striped">
+		<thead>
+			<tr class="table-control">
+				<th class="col-sm-3" colspan="2">
+					<p class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-search"></i>
+						</span>
+						<input placeholder="Global search" st-search class="form-control" type="text"/>
+					</p>
+				</th>
+				<th class="col-sm-3" colspan="5">
+					<div st-pagination="" st-items-by-page="par.itemsPerPage" st-displayed-pages="3"></div>
+				</th>
+				<th class="col-sm-1">
+					<p class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-th-list"></i>
+						</span>
+						<input placeholder="10" ng-model="par.itemsPerPage" class="form-control" type="number" min="1"/>
+					</p>
+				</th>
+			</tr>
+			<tr class="table-header">
+				<th st-sort="fund_cluster_name">Fund Cluster</th>
+				<th st-sort="id">PAR Number</th>
+				<th st-sort="person_in_charge">Person In Charge</th>
+				<th st-sort="person_in_charge">Remarks</th>
+				<th st-sort="date_added">Date Added</th>
+				<th st-sort="total_quantity">Total Quantity</th>
+				<th st-sort="total_amount">Total Amount</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in par.itemsToDisplay">
+				<td>{{item.delivery_receipt_fund_cluster_name}}</td>
+				<td>{{item.id}}</td>
+				<td>{{item.person_in_charge}}</td>
+				<td>{{item.remarks}}</td>
+				<td>{{item.date_added | date:'yyyy-MM-dd'}}</td>
+				<td align="right">{{item.total_quantity}}</td>
+				<td align="right">{{item.total_amount | currency:"Php "}}</td>
+				<td><a class="btn btn-primary btn-circle" href="/#/par/view/{{item.id}}/items">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+				</a></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

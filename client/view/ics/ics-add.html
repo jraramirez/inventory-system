@@ -1,0 +1,156 @@
+<div class="equipment-add" ng-controller="AddICSCtrl as ics">
+	<h3>Add a New Inventory Custodian Slip</h3>
+	<form class="form-horizontal" name="CheckICSForm" ng-submit="ics.validateCheckICSForm(CheckICSForm) && ics.checkICS()" ng-hide="ics.validICS" novalidate>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">
+				Fund Cluster
+			</label>
+			<div class="col-sm-10 btn-group">
+				<label class="btn btn-default" ng-model="ics.newICS.delivery_receipt_fund_cluster_name" ng-click="ics.getAllDRByFC('RAF 101')" uib-btn-radio="'RAF 101'" checked>RAF 101</label>
+				<label class="btn btn-default" ng-model="ics.newICS.delivery_receipt_fund_cluster_name" ng-click="ics.getAllDRByFC('SPECIAL ACCT 103')" uib-btn-radio="'SPECIAL ACCT 103'" >SPECIAL ACCT 103</label>
+				<label class="btn btn-default" ng-model="ics.newICS.delivery_receipt_fund_cluster_name" ng-click="ics.getAllDRByFC('IGF 105')" uib-btn-radio="'IGF 105'" >IGF 105</label>
+				<label class="btn btn-default" ng-model="ics.newICS.delivery_receipt_fund_cluster_name" ng-click="ics.getAllDRByFC('IATF 107')" uib-btn-radio="'IATF 107'" >IATF 107</label>
+			</div>
+		</fieldset>
+		<div class="jumbotron" ng-if="ics.DRs.length === 0">
+			<h3 class="text-center">
+				There are no Delivery Receipts under the Fund Cluster {{ics.newICS.delivery_receipt_fund_cluster_name}}. Add at least one Delivery Receipt first.
+				<button class="btn btn-primary" ng-click="ics.startOver()"> Start Over </button>
+			</h3>
+		</div>
+		<div ng-if="ics.DRs.length > 0">
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Delivery Receipt Number
+				</label>
+				<div class="col-sm-10">
+					<input type="text" ng-model="ics.tempDR" uib-typeahead="id as id.id for id in ics.DRs | filter:$viewValue | limitTo:25" typeahead-editable="false" class="form-control" placeholder="Delivery Receipt Number" value="null" name="delivery_receipt_id"/>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Inventory Custodian Slip Number
+				</label>
+				<div class="col-sm-10">
+					<input required ng-model="ics.newICS.id" type="text" class="form-control" placeholder="ICS Number" title="ICS Number" name="id"/>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Division
+				</label>
+				<div class="col-sm-10">
+					<input required ng-model="ics.newICS.division" type="text" class="form-control" placeholder="Division" title="Division" name="division"/>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Responsibility Code
+				</label>
+				<div class="col-sm-10">
+					<input required ng-model="ics.newICS.responsible" type="text" class="form-control" placeholder="Responsibility Code" title="Responsibility Code" name="responsible"/>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Date Added
+				</label>
+				<div class="col-sm-10">
+					<p class="input-group" ng-controller="UIBDatePickerCtrl as datepicker">
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default" ng-click="datepicker.open()">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+						<input required ng-model="ics.newICS.date_added" type="text" class="form-control" placeholder="YYYY-MM-DD" title="Date Added"  ng-click="datepicker.open()"
+						uib-datepicker-popup="yyyy-MM-dd" is-open="datepicker.isOpen" name="date_added" readonly/>
+					</p>
+				</div>
+			</fieldset>
+			<fieldset>
+				<div ng-show="ics.error" class="alert alert-danger" role="alert">
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					<span class="sr-only">Error:</span>
+					{{ics.errorMessage}}
+				</div>
+				<input type="submit" class="btn btn-primary pull-right" value="Check ICS Availability"/>
+			</fieldset>
+		</div>
+	</form>
+
+	<div ng-show="ics.validICS">
+		<h3>Add Items Under the New ICS Number {{ics.newICS.id}} With Fund Cluster {{ics.newICS.delivery_receipt_fund_cluster_name}}</h3>
+		<div class="jumbotron" ng-show="ics.ICSItems.length === 0">
+			<h3 class="text-center">
+				There are no items with stock under the Fund Cluster {{ics.newICS.delivery_receipt_fund_cluster_name}}. Check out other Fund Clusters.
+				<button class="btn btn-primary" ng-click="ics.startOver()"> Start Over </button>
+			</h3>
+		</div>
+		<form ng-show="ics.ICSItems.length > 0" name="AddICSItemsForm" ng-submit="ics.validateICSItemsForm(AddICSItemsForm) && ics.addICS()" novalidate>
+			<table ng-hide="ics.addingNewItem" st-table="ics.itemsToDisplay" st-safe-src="ics.ICSItems" class="table">
+				<thead>
+					<tr class="table-header">
+						<th st-sort="item_code">Item Code</th>
+						<th st-sort="description">Description</th>
+						<th st-sort="unit">Unit</th>
+						<th st-sort="quantity">Stock Quantity</th>
+						<th st-sort="quantity_subtracted">Issued Quantity</th>
+						<th>Suggested</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in ics.itemsToDisplay">
+						<td>{{item.item_code}}</td>
+						<td>{{item.description}}</td>
+						<td>{{item.unit}}</td>
+						<td>{{item.quantity}}</td>
+						<td>
+							<input ng-change="ics.updateTotals()" ng-model="item.quantity_subtracted" name="quantity_subtracted" type="number" class="form-control" max="item.quantity" min="1" required placeholder="Issued Quantity"/>
+						</td>
+						<td>
+							<div ng-if="item.price < 15000">
+								RIS/ICS
+							</div>
+							<div ng-if="item.price > 14999">
+								PAR
+							</div>
+						</td>
+						<td>
+							<button class="btn btn-danger btn-circle" ng-click="ics.removeEntry(item.id)">
+								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td>Total</td>
+						<td colspan="2"></td>
+						<td>{{ics.total_quantity_stock}}</td>
+						<td>{{ics.newICS.total_quantity}}</td>
+						<td colspan="2"></td>
+					</tr>
+				</tfoot>
+			</table>
+			<!--- TODO: proper error placement --->
+			<div ng-show="ics.itemError" class="alert alert-danger" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				{{ics.itemErrorMessage}}
+			</div>
+			<div class="btn-group pull-right">
+				<button class="btn btn-default" ng-click="ics.startOver()"> Start Over </button>
+				<input type="submit" class="btn btn-primary pull-right" value="Finish"/>
+			</div>
+		</form>
+	</div>
+	<div>
+		<!--- TODO: proper error placement --->
+		<div ng-show="ics.ICSError" class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			<span class="sr-only">Error:</span>
+			{{ics.ICSErrorMessage}}
+		</div>
+	</div>
+</div>

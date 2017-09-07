@@ -1,0 +1,25 @@
+{
+  "name": "psrtiinventorysystem",
+  "authors": [
+    "psrti"
+  ],
+  "description": "",
+  "main": "app.js",
+  "moduleType": [],
+  "license": "UNLICENSED",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#~1.4.8",
+    "angular-smart-table": "~2.1.6",
+    "angular-route": "~1.4.8",
+    "bootstrap": "~3.3.6",
+    "angular-bootstrap": "~1.1.2"
+  }
+}

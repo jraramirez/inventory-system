@@ -1,0 +1,64 @@
+<div class="supply-table" ng-controller="ItemByFCCtrl as fc">
+	<div>
+		<h3>List of All Supplies Under Fund Cluster {{fc.name}}</h3>
+	</div>
+	<table st-table="fc.itemsToDisplay" st-safe-src="fc.items" class="table table-striped">
+		<thead>
+			<tr class="table-control">
+				<th class="col-sm-3" colspan="2">
+					<p class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-search"></i>
+						</span>
+						<input placeholder="Global search" st-search class="form-control" type="text"/>
+					</p>
+				</th>
+				<th class="col-sm-3" colspan="4">
+					<div st-pagination="" st-items-by-page="fc.itemsPerPage" st-displayed-pages="3"></div>
+				</th>
+				<th class="col-sm-1">
+					<p class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-th-list"></i>
+						</span>
+						<input placeholder="10" ng-model="fc.itemsPerPage" class="form-control" type="number" min="1"/>
+					</p>
+				</th>
+			</tr>
+			<tr class="table-header">
+				<th st-sort="category">Category</th>
+				<th st-sort="item_code">Item Code</th>
+				<th st-sort="description">Description</th>
+				<th st-sort="unit">Unit</th>
+				<th st-sort="price">Unit Price</th>
+				<th st-sort="quantity">Quantity</th>
+				<th st-sort="amount">Amount</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in fc.itemsToDisplay">
+				<td>{{item.category}}</td>
+				<td>{{item.item_code}}</td>
+				<td>{{item.description}}</td>
+				<td>{{item.unit}}</td>
+				<td align="right">{{item.price | currency:"Php "}}</td>
+				<td align="right">{{item.quantity}}</td>
+				<td align="right">{{item.amount | currency:"Php "}}</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="10" class="text-center">
+					<div st-pagination="" st-items-by-page="itemsPerPage" st-displayed-pages="7"></div>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+	<div class="jumbotron" ng-show="fc.items.length == 0">
+		<h3 class="text-center">Fund Cluster {{fc.name}} has no items. Check out other fund clusters.
+			<button class="btn btn-primary" ng-click="fc.goBack()">
+				Go Back
+			</button>
+		</h3>
+	</div>
+</div>

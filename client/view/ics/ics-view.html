@@ -1,0 +1,55 @@
+
+<div class="supply-table" ng-controller="ICSCtrl as ics">
+	<div>
+		<h3>List of All Inventory Custodian Slips</h3>
+	</div>
+	<table st-table="ics.itemsToDisplay" st-safe-src="ics.ICSs" class="table table-striped">
+		<thead>
+			<tr class="table-control">
+				<th class="col-sm-3" colspan="2">
+					<p class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-search"></i>
+						</span>
+						<input placeholder="Global search" st-search class="form-control" type="text"/>
+					</p>
+				</th>
+				<th class="col-sm-3" colspan="5">
+					<div st-pagination="" st-items-by-page="ics.itemsPerPage" st-displayed-pages="3"></div>
+				</th>
+				<th class="col-sm-1">
+					<p class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-th-list"></i>
+						</span>
+						<input placeholder="10" ng-model="ics.itemsPerPage" class="form-control" type="number" min="1"/>
+					</p>
+				</th>
+			</tr>
+			<tr class="table-header">
+				<th st-sort="fund_cluster_name">Fund Cluster</th>
+				<th st-sort="id">ICS Number</th>
+				<th st-sort="division">Division</th>
+				<th st-sort="responsible">Responsibility Code</th>
+				<th st-sort="date_added">Date Added</th>
+				<th st-sort="total_quantity">Total Quantity</th>
+				<th st-sort="total_amount">Total Amount</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="item in ics.itemsToDisplay">
+				<td>{{item.delivery_receipt_fund_cluster_name}}</td>
+				<td>{{item.id}}</td>
+				<td>{{item.division}}</td>
+				<td>{{item.responsible}}</td>
+				<td>{{item.date_added | date:'yyyy-MM-dd'}}</td>
+				<td align="right">{{item.total_quantity}}</td>
+				<td align="right">{{item.total_amount | currency:"Php "}}</td>
+				<td><a class="btn btn-primary btn-circle" href="/#/ics/view/{{item.id}}/items">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+				</a></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

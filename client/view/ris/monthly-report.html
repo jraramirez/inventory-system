@@ -1,0 +1,119 @@
+
+<div class="supply-table" ng-controller="MonthlyCtrl as month">
+	<div>
+		<h3>Report of Supplies and Materials Issued</h3>
+	</div>
+	<form class="form-horizontal" ng-show="!month.validMonth" name="CheckMonthForm" ng-submit="month.validateCheckMonthForm(CheckMonthForm) && month.getAllRISByFCMonth()" novalidate>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">
+				Fund Cluster
+			</label>
+			<div class="col-sm-10 btn-group">
+				<label class="btn btn-default" ng-model="month.fund_cluster_name" ng-click="month.getAllRISByFCMonth('RAF 101')" uib-btn-radio="'RAF 101'" checked>RAF 101</label>
+				<label class="btn btn-default" ng-model="month.fund_cluster_name" ng-click="month.getAllRISByFCMonth('SPECIAL ACCT 103')" uib-btn-radio="'SPECIAL ACCT 103'" >SPECIAL ACCT 103</label>
+				<label class="btn btn-default" ng-model="month.fund_cluster_name" ng-click="month.getAllRISByFCMonth('IGF 105')" uib-btn-radio="'IGF 105'" >IGF 105</label>
+				<label class="btn btn-default" ng-model="month.fund_cluster_name" ng-click="month.getAllRISByFCMonth('IATF 107')" uib-btn-radio="'IATF 107'" >IATF 107</label>
+			</div>
+		</fieldset>
+		<fieldset class="form-group">
+			<label class="control-label col-sm-2">
+				Year-Month
+			</label>
+			<div class="col-sm-10">
+				<p class="input-group" ng-controller="UIBDatePickerCtrl as datepicker">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="datepicker.openInMonths()">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+					</span>
+					<input required ng-model="month.month" type="text" class="form-control" placeholder="yyyy-MMMM" title="Month"  ng-click="datepicker.openInMonths()"
+					uib-datepicker-popup="yyyy-MMMM" datepicker-options="datepicker.options" is-open="datepicker.isOpen" name="month" readonly/>
+				</p>
+			</div>
+		</fieldset>
+		<fieldset>
+			<!--- TODO: proper error placement --->
+			<div ng-show="month.error" class="alert alert-danger" role="alert">
+				<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				<span class="sr-only">Error:</span>
+				{{month.errorMessage}}
+			</div>
+			<input type="submit" class="btn btn-primary pull-right" value="Check Availability"/>
+		</fieldset>
+	</form>
+	<div class="form-horizontal" ng-show="month.validMonth">
+		<div class="jumbotron" ng-show="month.RISs.length == 0">
+			<h3 class="text-center">
+				There are no Requisition Issue Slips for the month of {{month.month | date:'MMMM'}} under the Fund Cluster {{month.fund_cluster_name}}. Check out other months and/or Fund Cluster.
+				<button class="btn btn-primary" ng-click="month.startOver()"> Start Over </button>
+			</h3>
+		</div>
+		<div ng-show="month.RISs.length > 0">
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Fund Cluster
+				</label>
+				<div class="col-sm-10">
+					<input readonly type="text" ng-model="month.fund_cluster_name" class="form-control"/>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<label class="control-label col-sm-2">
+					Year-Month
+				</label>
+				<div class="col-sm-10">
+					<input readonly type="text" ng-model="month.month" class="form-control" uib-datepicker-popup="yyyy-MMMM"/>
+				</div>
+			</fieldset>
+			<div id="report-table">
+				<table class="table">
+					<tr ng-hide="1">
+						<td>Fund Cluster:</td>
+						<td>{{month.fund_cluster_name}}</td>
+					</tr>
+					<tr ng-hide="1">
+						<td>Date:</td>
+						<td>{{month.month | date:'yyyy-MM'}}</td>
+					</tr>
+					<thead>
+						<tr class="table-header">
+							<th>RIS Number</th>
+							<th>Responsibility Code</th>
+							<th class="col-sm-1">Item Code</th>
+							<th class="col-sm-5">Description</th>
+							<th class="col-sm-1">Unit</th>
+							<th class="col-sm-2">Quantity Issued</th>
+							<th class="col-sm-2">Unit Cost</th>
+							<th class="col-sm-2">Amount</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in month.itemsToDisplay">
+							<td>{{item.id}}</td>
+							<td>{{item.responsible}}</td>
+							<td colspan="6">
+								<table class="table">
+									<tbody>
+										<tr ng-repeat="piece in item.items">
+											<td class="col-sm-1">{{piece.item_code}}</td>
+											<td class="col-sm-4">{{piece.description}}</td>
+											<td class="col-sm-1">{{piece.unit}}</td>
+											<td class="col-sm-1" align="right">{{piece.quantity_subtracted}}</td>
+											<td class="col-sm-2" align="right">{{piece.price | currency:"Php "}}</td>
+											<td class="col-sm-2" align="right">{{piece.amount | currency:"Php "}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div ng-controller="TableToExcelCtrl as table">
+				<button class="btn btn-primary pull-right" ng-click="table.exportToExcel('report-table')">
+					<span class="glyphicon glyphicon-share"></span> Export to Excel
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
